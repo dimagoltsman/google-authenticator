@@ -173,15 +173,18 @@
                 var detLink = $('<a href="#" data-clipboard-text="YESSSSS"><h3>' + key + '</h3><p>' + account.name + '</p></a>');
                 var accElem = $('<li data-icon="false">').append(detLink);
                 detLink.click(function(){
-
-
-                    var code = $(this).find("h3").text();
-
-                    console.log(code);
-
-
-                    window.prompt("Copy to clipboard: Ctrl+C, Enter", code);
-
+                    var element = $(this).find("h3");
+                    var code = element.text();
+                    var $temp = $('<input>');
+                    var message = $('<div id="success-message" class="success-message">Copied to clipboard</div>');
+                    $('body').append($temp);
+                    $temp.val(code).select();
+                    document.execCommand('copy');
+                    $temp.remove();
+                    element.after(message);
+                    setTimeout(function () {
+                        message.remove();
+                    }, 2000);
                 });
 
                 if(editingEnabled) {

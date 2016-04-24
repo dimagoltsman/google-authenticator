@@ -48,3 +48,20 @@ footer, div[data-role="footer"] {
 #addButton {
     display: none;
 }
+
+.content {
+    position: relative;
+}
+
+.success-message {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    font-size: 14px;
+    color: white;
+    padding: 3px;
+    text-shadow: none;
+    background-color: #31b035;
+    text-align: center;
+}
