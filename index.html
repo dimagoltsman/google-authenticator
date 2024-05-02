@@ -15,6 +15,7 @@
         <script src="js/init.js"></script>
         <script src="lib/jquery.mobile-1.4.5.min.js"></script>
         <script src="lib/jssha-1.31.min.js"></script>
+        <script src="lib/FileSaver.js"></script>
         <script src="js/gauth.js"></script>
         <script src="js/main.js"></script>
         <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
@@ -23,7 +24,6 @@
         <link rel="apple-touch-icon" sizes="152x152" href="img/icon_152.png">
     </head>
     <body>
-
 
         <section data-role="panel" id="panel" data-position="left" data-theme="a" data-display="overlay">
             <ul data-role="listview">
@@ -41,21 +41,13 @@
                 <a id="edit" class="header-icon" data-l10n-id="header-edit" data-role="button" data-iconpos="notext" data-icon="edit" data-iconpos="notext">Edit</a>
             </header>
 
-            <div data-role="content" class="content" style="max-width: 500px; margin: auto;">
+            <div data-role="content">
                 <ul data-role="listview" data-inset="true" data-theme="a" data-split-theme="a" data-split-icon="delete" id="accounts">
                     <li id="accountsHeader" data-l10n-id="title-keys" data-role="list-divider">One-time passwords<span class="ui-li-count" id='updatingIn'>..</span></li>
                 </ul>
 
                 <a id="addButton" data-l10n-id="keys-add" href="#add" data-role="button" class="ui-btn ui-icon-plus ui-btn-icon-left">Add</a>
-
-
             </div>
-            <footer data-role="footer">
-                <h1>@gbraad</h1>
-            </footer>
-
-
-
         </section>
 
         <section data-role="page" id="add" data-theme="a">
@@ -64,20 +56,18 @@
                 <a href="#panel" class="header-icon" data-l10n-id="header-menu" data-role="button" data-iconpos="notext" data-icon="bars" data-iconpos="notext">Menu</a>
             </header>
             <div data-role="content">
-                <p>
+                <div>
                     <form>
                         <label data-l10n-id="add-name" for="keyAccount">Account name:</label>
                         <input type="text" name="keyAccount" id="keyAccount" value="" autocorrect="off" autocapitalize="off" />
                         <label data-l10n-id="add-secret" for="keySecret">Secret key:</label>
                         <input type="text" name="keySecret" id="keySecret" value="" autocorrect="off" autocapitalize="off" />
                     </form>
-                </p>
-                <p>
-                    <div data-role="controlgroup" data-type="horizontal">
-                        <a id="addKeyButton" data-l10n-id="keys-add" data-role="button" class="ui-btn ui-icon-plus ui-btn-icon-left">Add</a>
-                        <a id="addKeyCancel" data-l10n-id="add-cancel" href="#main" data-role="button" data-rel="back">Cancel</a>
-                    </div>
-                </p>
+                </div>
+                <div data-role="controlgroup" data-type="horizontal">
+                    <a id="addKeyButton" data-l10n-id="keys-add" data-role="button" class="ui-btn ui-icon-plus ui-btn-icon-left">Add</a>
+                    <a id="addKeyCancel" data-l10n-id="add-cancel" href="#main" data-role="button" data-rel="back">Cancel</a>
+                </div>
             </div>
         </section>
 
@@ -103,25 +93,11 @@
                 <p><ul>
                     <li>Learn why<br/><a target=”_blank” href="http://lifehacker.com/5932700/please-turn-on-two+factor-authentication">Please, turn on two-factor authentication</a></li>
                     <li>Online<br/><a target=”_blank” href="http://gauth.apps.gbraad.nl/">http://gauth.apps.gbraad.nl/</a></li>
-                    <li>Application<br/><a target=”_blank” href="https://build.phonegap.com/apps/135419/">for Android</a></li>
-                    <!--<li>Extension<br/><a target=”_blank” href="https://chrome.google.com/webstore/detail/ilgcnhelpchnceeipipijaljkblbcobl?utm_source=chrome-ntp-icon">for Chrome</a></li>-->
-                    <li>Webapp<br/><a target=”_blank” href="https://marketplace.mozilla.org/app/gauth/">Mozilla Marketplace</a></li>
-                    <li>Source code<br/><a target=”_blank” href="http://github.com/gbraad/gauth/">http://github.com/gbraad/gauth/</a></li>
+                    <li>Source code<br/><a target=”_blank” href="http://github.com/gbraadnl/gauth/">http://github.com/gbraadnl/gauth/</a></li>
                     <li>Thanks to Russell Sayers<br/><a target=”_blank” href="http://blog.tinisles.com/2011/10/google-authenticator-one-time-password-algorithm-in-javascript/">TOTP Algorithm</a></li>
                 </ul></p>
-                <p>For more details or if you have suggestions, please do not hesitate to contact me at <a href="mailto:me+gauth@gbraad.nl?subject=gauth">me@gbraad.nl</a>.<br/><br/>
-                    <a target=”_blank” href="https://flattr.com/thing/717982/GAuth-Authenticator"><img src="img/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
-                </p>
-
-
-
-
             </div>
         </section>
-
-
-
-
 
     </body>
 </html>

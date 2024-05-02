@@ -82,6 +82,12 @@
 
         var generate = function(secret, epoch) {
             var key = base32tohex(secret);
+
+            // HMAC generator requires secret key to have even number of nibbles
+            if (key.length % 2 !== 0) {
+                key += '0';
+            }
+
             // If no time is given, set time as now
             if(typeof epoch === 'undefined') {
                 epoch = Math.round(new Date().getTime() / 1000.0);
@@ -97,8 +103,8 @@
                 offset = hex2dec(hmac.substring(hmac.length - 1));
             }
 
-            var otp = (hex2dec(hmac.substr(offset * 2, 8)) & hex2dec('7fffffff')) + '';
-            return (otp).substr(otp.length - 6, 6).toString();
+            var otp = (hex2dec(hmac.substr(offset * 2, 8)) & hex2dec('7fffffff')) % 1000000 + '';
+            return Array(7 - otp.length).join('0') + otp;
         };
 
         // exposed functions
@@ -122,7 +128,9 @@
             // Check if local storage is supported
             if (storageService.isSupported()) {
                 if (!storageService.getObject('accounts')) {
-                    addAccount('alice@google.com', 'JBSWY3DPEHPK3PXP');
+                    //addAccount('alice@google.com (demo account)', 'JBSWY3DPEHPK3PXP');
+                    storageService.setObject('accounts', []);
+                    toggleEdit();
                 }
 
                 updateKeys();
@@ -154,7 +162,7 @@
 
             var clearAddFields = function() {
                 $('#keyAccount').val('');
-		$('#keySecret').val('');
+		        $('#keySecret').val('');
             };
 
             $('#edit').click(function() { toggleEdit(); });
@@ -170,25 +178,12 @@
                 var key = keyUtilities.generate(account.secret);
 
                 // Construct HTML
-                var detLink = $('<a href="#" data-clipboard-text="YESSSSS"><h3>' + key + '</h3><p>' + account.name + '</p></a>');
+                var accName = $('<p>').text(account.name).html();  // print as-is
+                var detLink = $('<span class="secret"><h3>' + key + '</h3>' + accName + '</span>');
                 var accElem = $('<li data-icon="false">').append(detLink);
-                detLink.click(function(){
-                    var element = $(this).find("h3");
-                    var code = element.text();
-                    var $temp = $('<input>');
-                    var message = $('<div id="success-message" class="success-message">Copied to clipboard</div>');
-                    $('body').append($temp);
-                    $temp.val(code).select();
-                    document.execCommand('copy');
-                    $temp.remove();
-                    element.after(message);
-                    setTimeout(function () {
-                        message.remove();
-                    }, 2000);
-                });
-
+ 
                 if(editingEnabled) {
-                    var delLink = $('<a data-icon="delete" href="#"></a>');
+                    var delLink = $('<p class="ui-li-aside"><a class="ui-btn-icon-notext ui-icon-delete" href="#"></a></p>');
                     delLink.click(function () {
                         deleteAccount(index);
                     });
@@ -197,11 +192,6 @@
 
                 // Add HTML element
                 accountList.append(accElem);
-
-
-
-
-
             });
             accountList.listview().listview('refresh');
         };
@@ -218,10 +208,9 @@
 
         var exportAccounts = function() {
             var accounts = JSON.stringify(storageService.getObject('accounts'));
-            var expElem = document.createElement('a');
-            expElem.setAttribute('href', 'data:text/plain;charset=utf-8,' + accounts);
-            expElem.setAttribute('download', "gauth-export.json");
-            expElem.click();
+            var blob = new Blob([accounts], {type: 'text/plain;charset=utf-8'});
+
+            saveAs(blob, 'gauth-export.json');
         };
 
         var deleteAccount = function(index) {
@@ -255,6 +244,7 @@
             storageService.setObject('accounts', accounts);
 
             updateKeys();
+            toggleEdit();
 
             return true;
         };
