@@ -45,6 +45,11 @@ footer, div[data-role="footer"] {
     box-shadow: none;
 }
 
+h3:hover {
+    background-color: lightgray;
+}
+
+
 #addButton {
     display: none;
 }
