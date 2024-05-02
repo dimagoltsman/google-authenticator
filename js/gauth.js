@@ -181,6 +181,20 @@
                 var accName = $('<p>').text(account.name).html();  // print as-is
                 var detLink = $('<span class="secret"><h3>' + key + '</h3>' + accName + '</span>');
                 var accElem = $('<li data-icon="false">').append(detLink);
+                detLink.click(function(){
+                    var element = $(this).find("h3");
+                    var code = element.text();
+                    var $temp = $('<input>');
+                    var message = $('<div id="success-message" class="success-message">Copied to clipboard</div>');
+                    $('body').append($temp);
+                    $temp.val(code).select();
+                    document.execCommand('copy');
+                    $temp.remove();
+                    element.after(message);
+                    setTimeout(function () {
+                        message.remove();
+                    }, 2000);
+                });
  
                 if(editingEnabled) {
                     var delLink = $('<p class="ui-li-aside"><a class="ui-btn-icon-notext ui-icon-delete" href="#"></a></p>');
