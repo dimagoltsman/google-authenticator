@@ -165,6 +165,10 @@
 		        $('#keySecret').val('');
             };
 
+            $('#searchInput').on('keyup', function() {
+                updateKeys();
+            });
+
             $('#edit').click(function() { toggleEdit(); });
             $('#export').click(function() { exportAccounts(); });
         };
@@ -174,7 +178,13 @@
             // Remove all except the first line
             accountList.find("li:gt(0)").remove();
 
+            var searchQuery = ($('#searchInput').val() || '').toLowerCase();
+
             $.each(storageService.getObject('accounts'), function (index, account) {
+                if (searchQuery && account.name.toLowerCase().indexOf(searchQuery) === -1) {
+                    return; // skip non-matching accounts
+                }
+
                 var key = keyUtilities.generate(account.secret);
 
                 // Construct HTML
@@ -185,15 +195,19 @@
                     var element = $(this).find("h3");
                     var code = element.text();
                     var $temp = $('<input>');
-                    var message = $('<div id="success-message" class="success-message">Copied to clipboard</div>');
                     $('body').append($temp);
                     $temp.val(code).select();
                     document.execCommand('copy');
                     $temp.remove();
-                    element.after(message);
+                    // Remove any existing toast
+                    $('#copy-toast').remove();
+                    var toast = $('<div id="copy-toast" class="copy-toast">Copied!</div>');
+                    $('body').append(toast);
+                    setTimeout(function() { toast.addClass('show'); }, 10);
                     setTimeout(function () {
-                        message.remove();
-                    }, 2000);
+                        toast.removeClass('show');
+                        setTimeout(function() { toast.remove(); }, 300);
+                    }, 1500);
                 });
  
                 if(editingEnabled) {
@@ -212,11 +226,6 @@
 
         var toggleEdit = function() {
             editingEnabled = !editingEnabled;
-            if(editingEnabled) {
-                $('#addButton').show();
-            } else {
-                $('#addButton').hide();
-            }
             updateKeys();
         };
 
