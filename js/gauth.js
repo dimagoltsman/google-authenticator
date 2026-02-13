@@ -211,11 +211,45 @@
                 });
  
                 if(editingEnabled) {
-                    var delLink = $('<p class="ui-li-aside"><a class="ui-btn-icon-notext ui-icon-delete" href="#"></a></p>');
-                    delLink.click(function () {
-                        deleteAccount(index);
+                    accElem.attr('draggable', 'true');
+                    accElem.attr('data-index', index);
+
+                    var handle = $('<span class="drag-handle">&#8942;&#8942;</span>');
+                    accElem.prepend(handle);
+
+                    var delBtn = $('<a class="delete-btn" href="#">&times;</a>');
+                    delBtn.click(function(e) { e.preventDefault(); e.stopPropagation(); deleteAccount(index); });
+                    accElem.append(delBtn);
+
+                    accElem.on('dragstart', function(e) {
+                        e.originalEvent.dataTransfer.effectAllowed = 'move';
+                        e.originalEvent.dataTransfer.setData('text/plain', index);
+                        $(this).addClass('dragging');
                     });
-                    accElem.append(delLink);
+                    accElem.on('dragend', function() {
+                        $(this).removeClass('dragging');
+                        $('#accounts li').removeClass('drag-over drag-over-top');
+                    });
+                    accElem.on('dragover', function(e) {
+                        e.preventDefault();
+                        e.originalEvent.dataTransfer.dropEffect = 'move';
+                        var rect = this.getBoundingClientRect();
+                        var mid = rect.top + rect.height / 2;
+                        var isTop = e.originalEvent.clientY < mid;
+                        $(this).toggleClass('drag-over', !isTop).toggleClass('drag-over-top', isTop);
+                    });
+                    accElem.on('dragleave', function() {
+                        $(this).removeClass('drag-over drag-over-top');
+                    });
+                    accElem.on('drop', function(e) {
+                        e.preventDefault();
+                        var fromIndex = parseInt(e.originalEvent.dataTransfer.getData('text/plain'));
+                        var toIndex = parseInt($(this).attr('data-index'));
+                        if (fromIndex !== toIndex) {
+                            moveAccount(fromIndex, toIndex);
+                        }
+                        $('#accounts li').removeClass('drag-over drag-over-top');
+                    });
                 }
 
                 // Add HTML element
@@ -234,6 +268,15 @@
             var blob = new Blob([accounts], {type: 'text/plain;charset=utf-8'});
 
             saveAs(blob, 'gauth-export.json');
+        };
+
+        var moveAccount = function(fromIndex, toIndex) {
+            var accounts = storageService.getObject('accounts');
+            if (toIndex < 0 || toIndex >= accounts.length) return;
+            var item = accounts.splice(fromIndex, 1)[0];
+            accounts.splice(toIndex, 0, item);
+            storageService.setObject('accounts', accounts);
+            updateKeys();
         };
 
         var deleteAccount = function(index) {

@@ -202,31 +202,78 @@ html, body {
     text-shadow: none !important;
 }
 
-/* --- Delete button in edit mode --- */
-.ui-li-aside {
-    height: 100%;
-    top: 0;
+/* --- Edit mode: drag handle + delete --- */
+#accounts li {
+    position: relative;
 }
 
-.ui-btn-icon-notext.ui-icon-delete {
-    background: rgba(220, 50, 50, 0.12) !important;
-    border: 1px solid rgba(220, 50, 50, 0.25) !important;
+#accounts li[draggable="true"] {
+    display: flex !important;
+    align-items: center;
+    cursor: grab;
+    transition: opacity 0.2s, box-shadow 0.2s;
+}
+
+#accounts li[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+#accounts li.dragging {
+    opacity: 0.3;
+}
+
+#accounts li.drag-over {
+    box-shadow: 0 3px 0 0 #7c5fd6 inset;
+}
+
+#accounts li.drag-over-top {
+    box-shadow: 0 -3px 0 0 #7c5fd6;
+}
+
+.drag-handle {
+    display: flex;
+    align-items: center;
+    padding: 0 6px 0 12px;
+    font-size: 18px;
+    color: rgba(60, 60, 100, 0.3) !important;
+    letter-spacing: -4px;
+    cursor: grab;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+#accounts li[draggable="true"] .secret {
+    flex: 1;
+    min-width: 0;
+}
+
+.delete-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    margin-right: 12px;
     border-radius: 50% !important;
+    background: rgba(220, 50, 50, 0.08) !important;
+    border: 1px solid rgba(220, 50, 50, 0.15) !important;
+    color: #c0392b !important;
+    font-size: 20px;
+    line-height: 1;
+    text-decoration: none;
     transition: background 0.15s;
+    cursor: pointer;
+    padding: 0 !important;
+    box-shadow: none !important;
 }
 
-.ui-btn-icon-notext.ui-icon-delete:hover {
-    background: rgba(220, 50, 50, 0.25) !important;
-}
-
-.ui-listview .ui-li-aside {
-    height: 100%;
-    top: 0;
-}
-
-.ui-listview .ui-btn-icon-notext {
-    display: inline-block;
-    vertical-align: middle;
+.delete-btn:hover {
+    background: rgba(220, 50, 50, 0.18) !important;
 }
 
 /* --- Header right button group --- */
