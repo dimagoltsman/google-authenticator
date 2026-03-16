@@ -328,12 +328,10 @@ html, body {
     font-weight: 500;
 }
 
-/* --- Copy Toast (floating pill) --- */
+/* --- Copy Toast (floating pill above clicked item) --- */
 .copy-toast {
-    position: fixed;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
+    position: absolute;
+    transform: translateX(-50%) translateY(6px);
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);

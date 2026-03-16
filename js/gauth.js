@@ -191,7 +191,7 @@
                 var accName = $('<p>').text(account.name).html();  // print as-is
                 var detLink = $('<span class="secret"><h3>' + key + '</h3>' + accName + '</span>');
                 var accElem = $('<li data-icon="false">').append(detLink);
-                detLink.click(function(){
+                detLink.click(function(e){
                     var element = $(this).find("h3");
                     var code = element.text();
                     var $temp = $('<input>');
@@ -199,10 +199,14 @@
                     $temp.val(code).select();
                     document.execCommand('copy');
                     $temp.remove();
-                    // Remove any existing toast
                     $('#copy-toast').remove();
                     var toast = $('<div id="copy-toast" class="copy-toast">Copied!</div>');
                     $('body').append(toast);
+                    var rect = this.getBoundingClientRect();
+                    toast.css({
+                        top: (rect.top + window.scrollY - toast.outerHeight() - 8) + 'px',
+                        left: (rect.left + rect.width / 2) + 'px'
+                    });
                     setTimeout(function() { toast.addClass('show'); }, 10);
                     setTimeout(function () {
                         toast.removeClass('show');
